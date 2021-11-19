@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductsController extends Controller
 {
@@ -14,24 +15,31 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        return collect(['data' => Product::with('attributes')->get()]);
+        return response()->json(['data' => Product::with('attributes')->get()]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
      */
     public function store(Request $request)
     {
-        //
+        $product = new Product;
+        $product->name = $request->input('name');
+        $product->save();
+
+        $product->attributes()->sync(
+            $request->input('attributes')
+        );
+
+        return response()->json(['data' => $product->load('attributes')]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      */
     public function show($id)
     {
@@ -41,23 +49,27 @@ class ProductsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Product $product
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Product $product): \Illuminate\Http\JsonResponse
     {
-        //
+        $product->attributes()->sync(
+            $request->input('attribute')
+        );
+
+        return response()->json(['data' => $product->load('attributes')]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
      */
-    public function destroy($id)
+    public function destroy(Product $product)
     {
-        //
+        $product->delete();
+        return response()->json(null, 204);
     }
 }
