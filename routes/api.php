@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AttributesController;
 use App\Http\Controllers\Api\ProductsController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
@@ -20,5 +21,6 @@ use Illuminate\Support\Facades\Route;
 //Route::get('/products/{id}', [ProductsController::class, 'show']);
 
 Route::apiResources([
-    'products' => ProductsController::class
+    'products' => ProductsController::class,
+    'attributes' => AttributesController::class,
 ]);
