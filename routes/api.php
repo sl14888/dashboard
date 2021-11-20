@@ -15,10 +15,6 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-//
-//Route::get('/products', [ProductsController::class, 'index']);
-//
-//Route::get('/products/{id}', [ProductsController::class, 'show']);
 
 Route::apiResources([
     'products' => ProductsController::class,
