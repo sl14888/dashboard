@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Api\AttributesController;
 use App\Http\Controllers\Api\ProductsController;
-use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,7 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::apiResources([
-    'products' => ProductsController::class,
-    'attributes' => AttributesController::class,
-]);
+Route::group(['middleware' => ['auth:sanctum', 'role:admin']], function () {
+    Route::apiResources([
+        'products' => ProductsController::class,
+        'attributes' => AttributesController::class,
+    ]);
+});
